@@ -5,13 +5,10 @@ import 'package:flutter_playground/models.dart';
 import 'package:http/http.dart' show Client;
 
 class PropertyService {
-  Client _client;
-
   static const _AUTHORITY = 'api.nestoria.co.uk';
   static const _PATH = '/api';
-
   static const _TIMEOUT = const Duration(seconds: 5);
-
+  
   static Map<String, String> get _defaultParams => <String, String>{
         'action': 'search_listings',
         'country': 'uk',
@@ -20,7 +17,9 @@ class PropertyService {
         'page': '1',
       };
 
-  PropertyService(client)
+  final Client _client;
+
+  const PropertyService(client)
       : assert(client != null),
         _client = client;
 
