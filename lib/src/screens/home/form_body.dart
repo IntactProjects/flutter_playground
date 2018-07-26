@@ -13,8 +13,14 @@ class FormBody extends StatefulWidget {
 }
 
 class FormBodyState extends State<FormBody> {
-  final TextEditingController _searchController = TextEditingController();
-  bool get isSearchValid => _searchController.text.isNotEmpty;
+  TextEditingController _searchController;
+  bool get validForSearch => _searchController.text.isNotEmpty;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +33,17 @@ class FormBodyState extends State<FormBody> {
             border: OutlineInputBorder(),
           ),
           onChanged: (_) => _refreshState(),
+          // BUG: on Android, onSubmitted is not called when pressing the Enter key on a physical keyboard
+          onSubmitted: validForSearch
+              ? (query) => widget.onSubmit(context, query)
+              : null,
         ),
         SizedBox(height: 8.0),
         Row(
           children: <Widget>[
             RaisedButton(
               child: Text("Go"),
-              onPressed: isSearchValid
+              onPressed: validForSearch
                   ? () => widget.onSubmit(context, _searchController.text)
                   : null,
             ),
