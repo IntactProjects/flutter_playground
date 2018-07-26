@@ -1,4 +1,4 @@
-package fr.in-tact.flutterplayground
+package fr.intact.flutterplayground
 
 import android.os.Bundle
 
