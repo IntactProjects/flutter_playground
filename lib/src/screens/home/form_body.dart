@@ -1,12 +1,15 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 const SEARCH_MY_LOCATION = "MY_LOCATION";
 typedef void SearchCallback(BuildContext context, String query);
 
 class FormBody extends StatefulWidget {
+  final bool searching;
   final SearchCallback onSubmit;
 
-  FormBody({Key key, this.onSubmit}) : super(key: key);
+  FormBody({Key key, this.searching = false, this.onSubmit}) : super(key: key);
 
   @override
   FormBodyState createState() => FormBodyState();
@@ -15,6 +18,7 @@ class FormBody extends StatefulWidget {
 class FormBodyState extends State<FormBody> {
   TextEditingController _searchController;
   bool get validForSearch => _searchController.text.isNotEmpty;
+  bool get isIOS => defaultTargetPlatform == TargetPlatform.iOS;
 
   @override
   void initState() {
@@ -31,7 +35,10 @@ class FormBodyState extends State<FormBody> {
           decoration: InputDecoration(
             hintText: 'Address',
             border: OutlineInputBorder(),
+            suffixIcon:
+                widget.searching && isIOS ? CupertinoActivityIndicator() : null,
           ),
+          enabled: !widget.searching,
           onChanged: (_) => _refreshState(),
           // BUG: on Android, onSubmitted is not called when pressing the Enter key on a physical keyboard
           onSubmitted: validForSearch
@@ -43,14 +50,16 @@ class FormBodyState extends State<FormBody> {
           children: <Widget>[
             RaisedButton(
               child: Text("Go"),
-              onPressed: validForSearch
+              onPressed: validForSearch && !widget.searching
                   ? () => widget.onSubmit(context, _searchController.text)
                   : null,
             ),
             SizedBox(width: 8.0),
             RaisedButton(
               child: Text("My location"),
-              onPressed: () => widget.onSubmit(context, SEARCH_MY_LOCATION),
+              onPressed: !widget.searching
+                  ? () => widget.onSubmit(context, SEARCH_MY_LOCATION)
+                  : null,
             )
           ],
         )
