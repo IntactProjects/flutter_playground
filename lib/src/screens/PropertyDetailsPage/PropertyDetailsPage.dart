@@ -40,7 +40,7 @@ class PropertyDetailsPage extends StatelessWidget {
                   ),
                   SizedBox(height: 10.0),
                   Image.network(
-                    "https://i.ytimg.com/vi/fq4N0hgOWzU/maxresdefault.jpg",
+                    property.image.toString(),
                   ),
                   SizedBox(height: 10.0),
                   Text(

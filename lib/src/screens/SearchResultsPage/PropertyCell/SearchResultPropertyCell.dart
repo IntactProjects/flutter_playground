@@ -11,13 +11,14 @@ class SearchResultsPropertyCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(property.image.toString());
     return Card(
       child: InkWell(
         onTap: () => onTap(property),
         child: Row(
           children: <Widget>[
             Image.network(
-              "https://i.ytimg.com/vi/fq4N0hgOWzU/maxresdefault.jpg",
+              property.image.toString(),
               height: 100.0,
               width: 100.0,
             ),

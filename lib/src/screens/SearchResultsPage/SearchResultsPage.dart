@@ -46,7 +46,7 @@ class SearchResultsPage extends StatelessWidget {
           address: "$i rue Royale, Lyon",
           locality: "France",
           price: 333333.0,
-          image: Uri.https("i.ytimg.com", "/fq4N0hgOWzU/maxresdefault.jpg")));
+          image: Uri.https("i.ytimg.com", "vi/fq4N0hgOWzU/maxresdefault.jpg")));
     }
 
     return properties;
