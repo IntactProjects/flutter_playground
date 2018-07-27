@@ -6,11 +6,18 @@ import 'package:http/http.dart' as http;
 class HttpClient extends http.BaseClient {
   static final _log = Logger('HTTP');
 
+  var _client = http.Client();
+
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) {
     // Use default client while logging requests
     _log.config("$request");
-    var client = http.Client();
-    return client.send(request).whenComplete(() => client.close());
+    return _client.send(request);
+  }
+
+  @override
+  void close() {
+    _client.close();
+    super.close();
   }
 }
