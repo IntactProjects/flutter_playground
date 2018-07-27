@@ -1,17 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/infra.dart';
 import 'package:flutter_playground/screens.dart';
+import 'package:flutter_playground/src/models/search_result.dart';
 import 'package:flutter_playground/src/screens/home/form_body.dart';
 import 'package:flutter_playground/src/screens/home/location_selection_list.dart';
 import 'package:flutter_playground/src/screens/home/recent_search_list.dart';
-
-class HomePage extends StatefulWidget {
-  @override
-  HomePageState createState() => new HomePageState();
-}
 
 enum DisplayMode {
   RECENT,
@@ -19,9 +13,15 @@ enum DisplayMode {
   ERROR,
 }
 
+class HomePage extends StatefulWidget {
+  @override
+  HomePageState createState() => new HomePageState();
+}
+
 class HomePageState extends State<HomePage> {
   bool _searching;
   DisplayMode _displayMode;
+  SearchResult _result;
 
   @override
   void initState() {
@@ -32,9 +32,6 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var propertyService = Provider.of(context).propertyService;
-    if (propertyService == null) throw StateError("propertyService is null");
-
     var appBarActions = <Widget>[
       IconButton(
         icon: Icon(Icons.star),
@@ -70,7 +67,9 @@ class HomePageState extends State<HomePage> {
                   case DisplayMode.RECENT:
                     return RecentSearchList();
                   case DisplayMode.LOCATIONS:
-                    return LocationSelectionList();
+                    return LocationSelectionList(
+                      candidates: _result.locations,
+                    );
                   case DisplayMode.ERROR:
                     return Text(_getErrorMessage());
                   default:
@@ -89,18 +88,63 @@ class HomePageState extends State<HomePage> {
   }
 
   void _search(BuildContext context, String query) {
-    Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text("TODO Search $query")),
-        );
-    setState(() => _searching = true);
-    Future
-        .delayed(Duration(seconds: 2))
-        .then((_) => setState(() => _searching = false));
+    var propertyService = Provider.of(context).propertyService;
+    if (query == SEARCH_MY_LOCATION) {
+      // TODO Search around
+      Scaffold.of(context).showSnackBar(
+            SnackBar(content: Text("TODO Search $query")),
+          );
+    } else {
+      setState(() => _searching = true);
+      propertyService
+          .search(query)
+          .then((result) => _onSearchResult(context, result));
+    }
+  }
+
+  void _onSearchResult(BuildContext context, SearchResult result) {
+    DisplayMode displayMode;
+    switch (result.type) {
+      case ResultType.SUCCESSFUL:
+        Scaffold.of(context).showSnackBar(
+              SnackBar(
+                content: Text("${result.properties.length} properties found!"),
+              ),
+            );
+        // TODO Pass results to result page
+        Navigator.of(context).pushNamed(NamedRoutes.SEARCH_RESULT);
+        break;
+      case ResultType.AMBIGUOUS:
+        displayMode = DisplayMode.LOCATIONS;
+        break;
+      default:
+        displayMode = DisplayMode.ERROR;
+    }
+
+    setState(() {
+      _searching = false;
+      _displayMode = displayMode;
+      _result = result;
+    });
   }
 
   String _getErrorMessage() {
-    // TODO Build error message according to the SearchResult
-    return "There was a problem with your search";
+    if (_result == null) return null;
+
+    if (_result.type == ResultType.NO_RESULT) {
+      return "There were no properties found for the given location.";
+    }
+
+    // TODO Handle location (GPS) error
+    switch (_result.error) {
+      case SearchError.TIMEOUT:
+        return "An error occurred while searching. Please check your network connection and try again.";
+      case SearchError.UNKNOWN_LOCATION:
+      case SearchError.COORDINATE_ERROR:
+        return "The location given was not recognised.";
+      default:
+        return "There was a problem with your search";
+    }
   }
 }
 
