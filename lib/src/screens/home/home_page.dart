@@ -2,7 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/infra.dart';
 import 'package:flutter_playground/screens.dart';
-import 'package:flutter_playground/src/models/search_result.dart';
+import 'package:flutter_playground/widgets.dart';
+import 'package:flutter_playground/models.dart';
 import 'package:flutter_playground/src/screens/home/form_body.dart';
 import 'package:flutter_playground/src/screens/home/location_selection_list.dart';
 import 'package:flutter_playground/src/screens/home/recent_search_list.dart';
@@ -145,33 +146,5 @@ class HomePageState extends State<HomePage> {
       default:
         return "There was a problem with your search";
     }
-  }
-}
-
-class AppBarProgressIndicator extends StatelessWidget {
-  const AppBarProgressIndicator({
-    Key key,
-    @required this.appTheme,
-  }) : super(key: key);
-
-  final ThemeData appTheme;
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: Container(
-        height: 24.0,
-        width: 24.0,
-        child: Theme(
-          data: appTheme.copyWith(
-            accentColor: appTheme.primaryIconTheme.color,
-          ),
-          child: CircularProgressIndicator(
-            strokeWidth: 3.0,
-          ),
-        ),
-      ),
-      onPressed: null,
-    );
   }
 }
