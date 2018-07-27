@@ -11,10 +11,18 @@ class SearchResult {
     this.error,
   });
 
-  bool get successful => error == null && properties.isNotEmpty;
-  bool get ambiguous =>
-      error == null && properties.isEmpty && locations.isNotEmpty;
-  bool get failed => error != null;
+  ResultType get type {
+    if (error != null) {
+      return ResultType.FAILED;
+    } else if (properties.isNotEmpty) {
+      return ResultType.SUCCESSFUL;
+    } else if (properties.isEmpty && locations.length > 1) {
+      return ResultType.AMBIGUOUS;
+    } else if (properties.isEmpty) {
+      return ResultType.NO_RESULT;
+    }
+    throw StateError("Unable to compute the resultType");
+  }
 }
 
 enum SearchError {
@@ -23,4 +31,11 @@ enum SearchError {
   COORDINATE_ERROR,
   INVALID_REQUEST,
   SERVER_ERROR,
+}
+
+enum ResultType {
+  SUCCESSFUL,
+  NO_RESULT,
+  AMBIGUOUS,
+  FAILED,
 }

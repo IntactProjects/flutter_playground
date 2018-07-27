@@ -13,10 +13,7 @@ void main() {
     var http = MockClient((_) => Future.value(responses.searchByName));
     var result = await PropertyService(http).search("leeds");
 
-    expect(result.successful, true);
-    expect(result.ambiguous, false);
-    expect(result.failed, false);
-
+    expect(result.type, ResultType.SUCCESSFUL);
     expect(result.properties.length, 20);
     expect(result.locations.length, 1);
 
@@ -29,10 +26,7 @@ void main() {
     var result = await PropertyService(http)
         .searchAround(Geolocation(latitude: 51.684183, longitude: -3.431481));
 
-    expect(result.successful, true);
-    expect(result.ambiguous, false);
-    expect(result.failed, false);
-
+    expect(result.type, ResultType.SUCCESSFUL);
     expect(result.properties.length, 20);
     expect(result.locations.length, 1);
   });
@@ -41,10 +35,7 @@ void main() {
     var http = MockClient((_) => Future.value(responses.searchAmbiguous));
     var result = await PropertyService(http).search("something");
 
-    expect(result.successful, false);
-    expect(result.ambiguous, true);
-    expect(result.failed, false);
-
+    expect(result.type, ResultType.AMBIGUOUS);
     expect(result.properties.length, 0);
     expect(result.locations.length, 2);
   });
@@ -58,10 +49,7 @@ void main() {
           );
 
           PropertyService(http).search("something").then((result) {
-            expect(result.successful, false);
-            expect(result.ambiguous, false);
-            expect(result.failed, true);
-
+            expect(result.type, ResultType.FAILED);
             expect(result.error, SearchError.TIMEOUT);
             expect(result.properties.length, 0);
             expect(result.locations.length, 0);
