@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_playground/infra.dart';
 import 'package:flutter_playground/screens.dart';
 
+const USE_MOCK = true;
+
 void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
@@ -13,6 +15,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider(
+      propertyService:
+          USE_MOCK ? MockPropertyService() : PropertyService(HttpClient()),
       child: new MaterialApp(
         title: 'Property Cross',
         theme: new ThemeData(
