@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'src/screens/SearchResultsPage/SearchResultsPage.dart';
 import 'package:flutter_playground/infra.dart';
 import 'package:flutter_playground/screens.dart';
 
