@@ -89,14 +89,20 @@ class HomePageState extends State<HomePage> {
   }
 
   void _search(BuildContext context, String query) {
-    var propertyService = Provider.of(context).propertyService;
+    var provider = Provider.of(context);
+    var propertyService = provider.propertyService;
+
+    setState(() => _searching = true);
     if (query == SEARCH_MY_LOCATION) {
-      // TODO Search around
-      Scaffold.of(context).showSnackBar(
-            SnackBar(content: Text("TODO Search $query")),
-          );
+      provider.geolocationService
+          .getLocation()
+          .then(
+            (geoloc) => propertyService.searchAround(geoloc),
+            onError: _onGeolocError,
+          )
+          .catchError(_onGeolocError)
+          .then((result) => _onSearchResult(context, result));
     } else {
-      setState(() => _searching = true);
       propertyService
           .search(query)
           .then((result) => _onSearchResult(context, result));
@@ -134,6 +140,13 @@ class HomePageState extends State<HomePage> {
     });
   }
 
+  void _onGeolocError(error) {
+    setState(() {
+      _searching = false;
+      _result = SearchResult(error: SearchError.LOCATION_DISABLED);
+    });
+  }
+
   String _getErrorMessage() {
     if (_result == null) return null;
 
@@ -141,13 +154,17 @@ class HomePageState extends State<HomePage> {
       return "There were no properties found for the given location.";
     }
 
-    // TODO Handle location (GPS) error
     switch (_result.error) {
-      case SearchError.TIMEOUT:
+      case SearchError.SEARCH_TIMEOUT:
         return "An error occurred while searching. Please check your network connection and try again.";
       case SearchError.UNKNOWN_LOCATION:
       case SearchError.COORDINATE_ERROR:
         return "The location given was not recognised.";
+      case SearchError.LOCATION_DISABLED:
+      case SearchError.LOCATION_PERMISSION_REFUSED:
+        return "The use of location is currently disabled.";
+      case SearchError.LOCATION_TIMEOUT:
+        return "Unable to detect current location. Please ensure location is turned on in your phone settings and try again.";
       default:
         return "There was a problem with your search";
     }

@@ -50,7 +50,7 @@ void main() {
 
           PropertyService(http).search("something").then((result) {
             expect(result.type, ResultType.FAILED);
-            expect(result.error, SearchError.TIMEOUT);
+            expect(result.error, SearchError.SEARCH_TIMEOUT);
             expect(result.properties.length, 0);
             expect(result.locations.length, 0);
           });

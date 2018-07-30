@@ -8,7 +8,7 @@ class PropertyService {
   static const _AUTHORITY = 'api.nestoria.co.uk';
   static const _PATH = '/api';
   static const _TIMEOUT = const Duration(seconds: 5);
-  
+
   static Map<String, String> get _defaultParams => <String, String>{
         'action': 'search_listings',
         'country': 'uk',
@@ -51,7 +51,7 @@ class PropertyService {
         .then(_processJson)
         .timeout(
           _TIMEOUT,
-          onTimeout: () => SearchResult(error: SearchError.TIMEOUT),
+          onTimeout: () => SearchResult(error: SearchError.SEARCH_TIMEOUT),
         );
   }
 }
