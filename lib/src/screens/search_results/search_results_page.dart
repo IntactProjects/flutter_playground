@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/models.dart';
-import 'package:flutter_playground/src/screens/app_navigator.dart';
+import 'package:flutter_playground/screens.dart';
 import 'package:flutter_playground/src/screens/search_results/property_cell/search_result_property_cell.dart';
 
 class SearchResultsPage extends StatelessWidget {

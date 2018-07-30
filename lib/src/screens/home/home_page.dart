@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/infra.dart';
-import 'package:flutter_playground/src/screens/app_navigator.dart';
+import 'package:flutter_playground/screens.dart';
 import 'package:flutter_playground/widgets.dart';
 import 'package:flutter_playground/models.dart';
 import 'package:flutter_playground/src/screens/home/form_body.dart';
