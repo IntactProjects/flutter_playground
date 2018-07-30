@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/models.dart';
 import 'package:flutter_playground/screens.dart';
-import 'package:flutter_playground/src/screens/PropertyDetailsPage/PropertyDetailsPage.dart';
-import 'package:flutter_playground/src/screens/SearchResultsPage/SearchResultsPage.dart';
+import 'package:flutter_playground/src/screens/property_details/property_details_page.dart';
+import 'package:flutter_playground/src/screens/search_results/search_results_page.dart';
 
 class AppNavigator {
   AppNavigator._();
