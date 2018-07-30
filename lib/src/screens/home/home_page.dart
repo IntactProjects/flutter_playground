@@ -107,13 +107,18 @@ class HomePageState extends State<HomePage> {
     DisplayMode displayMode;
     switch (result.type) {
       case ResultType.SUCCESSFUL:
+        setState(() {
+          _searching = false;
+          _displayMode = DisplayMode.RECENT;
+        });
+
         Scaffold.of(context).showSnackBar(
               SnackBar(
                 content: Text("${result.properties.length} properties found!"),
               ),
             );
         // TODO Pass results to result page
-        Navigator.of(context).pushNamed(NamedRoutes.SEARCH_RESULT);
+        //Navigator.of(context).pushNamed(NamedRoutes.SEARCH_RESULT);
         break;
       case ResultType.AMBIGUOUS:
         displayMode = DisplayMode.LOCATIONS;
