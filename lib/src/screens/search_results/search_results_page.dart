@@ -16,6 +16,7 @@ class SearchResultsPage extends StatelessWidget {
       ),
       body: SafeArea(
         child: ListView(
+          scrollDirection: Axis.vertical,
           children: _getListData(context),
         ),
       ),

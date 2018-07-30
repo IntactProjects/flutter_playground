@@ -24,15 +24,17 @@ class SearchResultsPropertyCell extends StatelessWidget {
                 height: 100.0,
                 width: 100.0,
               ),
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text("${property.price} euros"),
-                    SizedBox(height: 15.0),
-                    Text("${property.address}, ${property.locality}"),
-                  ],
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text("${property.price} euros"),
+                      SizedBox(height: 15.0),
+                      Text("${property.address}, ${property.locality}"),
+                    ],
+                  ),
                 ),
               )
             ],

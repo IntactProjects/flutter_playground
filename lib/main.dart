@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_playground/infra.dart';
 import 'package:flutter_playground/screens.dart';
 
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 void main() => runApp(new MyApp());
 
