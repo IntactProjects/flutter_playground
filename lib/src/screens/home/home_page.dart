@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/infra.dart';
-import 'package:flutter_playground/screens.dart';
+import 'package:flutter_playground/src/screens/app_navigator.dart';
 import 'package:flutter_playground/widgets.dart';
 import 'package:flutter_playground/models.dart';
 import 'package:flutter_playground/src/screens/home/form_body.dart';
@@ -85,7 +85,7 @@ class HomePageState extends State<HomePage> {
   }
 
   void _goToFavorites(BuildContext context) {
-    Navigator.of(context).pushNamed(NamedRoutes.FAVORITES);
+    AppNavigator.goToFavorites(context);
   }
 
   void _search(BuildContext context, String query) {
@@ -111,14 +111,7 @@ class HomePageState extends State<HomePage> {
           _searching = false;
           _displayMode = DisplayMode.RECENT;
         });
-
-        Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text("${result.properties.length} properties found!"),
-              ),
-            );
-        // TODO Pass results to result page
-        //Navigator.of(context).pushNamed(NamedRoutes.SEARCH_RESULT);
+        AppNavigator.goToSearchResults(context, result.properties.toList());
         break;
       case ResultType.AMBIGUOUS:
         displayMode = DisplayMode.LOCATIONS;
