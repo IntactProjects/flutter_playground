@@ -15,24 +15,34 @@ class SearchResultsPage extends StatelessWidget {
         title: Text("20 of ${properties.length} matches"),
       ),
       body: SafeArea(
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          children: _getListData(context),
+        child: ListView.builder(
+          itemCount: properties.length + 1,
+          itemBuilder: (context, index) {
+            if (index < properties.length) {
+              return _createPropertyCell(context, properties[index]);
+            } else {
+              return RaisedButton(
+                  color: Theme.of(context).primaryColor,
+                  elevation: 4.0,
+                  splashColor: Colors.grey,
+                  child: Text(
+                      "Load more … \nResults for #search_term#, showing x of y properties"),
+                  onPressed: () {
+                    print("Load Data");
+                  });
+            }
+          },
         ),
       ),
     );
   }
 
-  List<Widget> _getListData(BuildContext context) {
+  Widget _createPropertyCell(BuildContext context, Property property) {
     var onTap = (Property property) =>
         AppNavigator.goToPropertyDetails(context, property);
-    var widgets = properties
-        .map((property) => SearchResultsPropertyCell(
-              property: property,
-              onTap: onTap,
-            ))
-        .toList();
-
-    return widgets;
+    return SearchResultsPropertyCell(
+      property: property,
+      onTap: onTap,
+    );
   }
 }
