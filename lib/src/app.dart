@@ -28,11 +28,15 @@ class App extends StatelessWidget {
       return ProviderConfig(
         propertyService: MockPropertyService(),
         geolocationService: MockGeolocationService(),
+        favoriteService: FavoriteService(),
+        historyService: HistoryService(),
       );
     } else {
       return ProviderConfig(
         propertyService: PropertyService(HttpClient()),
         geolocationService: GeolocationService(),
+        favoriteService: FavoriteService(),
+        historyService: HistoryService(),
       );
     }
   }

@@ -8,3 +8,5 @@ export 'package:flutter_playground/src/data/property_service.dart';
 export 'package:flutter_playground/src/data/mock_property_service.dart';
 export 'package:flutter_playground/src/data/geolocation_service.dart';
 export 'package:flutter_playground/src/data/mock_geolocation_service.dart';
+export 'package:flutter_playground/src/data/favorite_service.dart';
+export 'package:flutter_playground/src/data/history_service.dart';
