@@ -14,8 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider(
-      propertyService:
-          USE_MOCK ? MockPropertyService() : PropertyService(HttpClient()),
+      config: _buildProviderConfig(),
       child: new MaterialApp(
         title: 'Property Cross',
         theme: new ThemeData(
@@ -24,5 +23,19 @@ class MyApp extends StatelessWidget {
         home: HomePage(),
       ),
     );
+  }
+
+  ProviderConfig _buildProviderConfig() {
+    if (USE_MOCK) {
+      return ProviderConfig(
+        propertyService: MockPropertyService(),
+        geolocationService: MockGeolocationService(),
+      );
+    } else {
+      return ProviderConfig(
+        propertyService: PropertyService(HttpClient()),
+        geolocationService: GeolocationService(),
+      );
+    }
   }
 }
