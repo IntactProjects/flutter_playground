@@ -9,20 +9,36 @@ import 'package:flutter_playground/src/app.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Search for properties in Leeds', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(new App(mock: true));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    var addressFinder = find.byWidgetPredicate(
+      (w) => w is TextField && w.decoration.hintText == 'Address',
+    );
+    var goButton = 'Go';
+    var locationButton = 'My location';
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    expect(addressFinder, findsOneWidget);
+
+    // Verify that the Go button is disabled
+    expect(_findButton(goButton, disabled: true), findsOneWidget);
+    expect(_findButton(locationButton), findsOneWidget);
+
+    // Enter some text in the address field
+    await tester.enterText(addressFinder, 'Leeds');
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify that the Go button is disabled
+    expect(_findButton(goButton), findsOneWidget);
+    expect(_findButton(locationButton), findsOneWidget);
+  });
+}
+
+Finder _findButton(String label, {bool disabled = false}) {
+  return find.byWidgetPredicate((w) {
+    return w is RaisedButton &&
+        (w.child as Text).data == label &&
+        (disabled || w.onPressed != null);
   });
 }
