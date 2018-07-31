@@ -4,22 +4,23 @@ import 'package:flutter_playground/screens.dart';
 import 'package:flutter_playground/src/screens/search_results/property_cell/search_result_property_cell.dart';
 
 class SearchResultsPage extends StatelessWidget {
-  final List<Property> properties;
+  final PropertyResult result;
 
-  const SearchResultsPage({@required this.properties});
+  const SearchResultsPage({@required this.result});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("20 of ${properties.length} matches"),
+        title: Text("20 of ${result.properties.length} matches"),
       ),
       body: SafeArea(
         child: ListView.builder(
-          itemCount: properties.length + 1,
+          itemCount: result.properties.length + 1,
           itemBuilder: (context, index) {
-            if (index < properties.length) {
-              return _createPropertyCell(context, properties[index]);
+            if (index < result.properties.length) {
+              return _createPropertyCell(
+                  context, result.properties.toList()[index]);
             } else {
               return RaisedButton(
                   color: Theme.of(context).primaryColor,

@@ -8,13 +8,12 @@ class PropertyService {
   static const _AUTHORITY = 'api.nestoria.co.uk';
   static const _PATH = '/api';
   static const _TIMEOUT = const Duration(seconds: 5);
-  
+
   static Map<String, String> get _defaultParams => <String, String>{
         'action': 'search_listings',
         'country': 'uk',
         'encoding': 'json',
         'listing_type': 'buy',
-        'page': '1',
       };
 
   final Client _client;
@@ -23,18 +22,20 @@ class PropertyService {
       : assert(client != null),
         _client = client;
 
-  Future<SearchResult> search(String query) {
+  Future<SearchResult> search(String query, {int page = 1}) {
     // "http://api.nestoria.co.uk/api?country=uk&pretty=1&action=search_listings&encoding=json&listing_type=buy&page=1&place_name=leeds";
     var uri = _buildUri(<String, String>{
       'place_name': query,
+      'page': '$page',
     });
     return _get(uri);
   }
 
-  Future<SearchResult> searchAround(Geolocation location) {
+  Future<SearchResult> searchAround(Geolocation location, {int page = 1}) {
     // "https://api.nestoria.co.uk/api?country=uk&pretty=1&action=search_listings&encoding=json&listing_type=buy&page=1&centre_point=51.684183,-3.431481";
     var uri = _buildUri(<String, String>{
       'centre_point': '${location.latitude},${location.longitude}',
+      'page': '$page',
     });
     return _get(uri);
   }
@@ -60,9 +61,17 @@ SearchResult _processJson(rawValue) {
   var response = rawValue['response'];
   int responseCode = int.parse(response['application_response_code']);
   return SearchResult(
-    properties: response['listings'].map<Property>(_jsonToProperty),
+    propertyResult: _jsonToPropertyResult(response),
     locations: response['locations'].map<Location>(_jsonToLocation),
     error: _searchError(responseCode),
+  );
+}
+
+PropertyResult _jsonToPropertyResult(jsonValue) {
+  return PropertyResult(
+    properties: jsonValue['listings'].map<Property>(_jsonToProperty),
+    page: jsonValue['page'],
+    totalResults: jsonValue['total_results'],
   );
 }
 
