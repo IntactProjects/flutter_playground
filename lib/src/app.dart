@@ -24,19 +24,21 @@ class App extends StatelessWidget {
   }
 
   ProviderConfig _buildProviderConfig() {
+    var persistence = Persistence();
+
     if (mock) {
       return ProviderConfig(
         propertyService: MockPropertyService(),
         geolocationService: MockGeolocationService(),
-        favoriteService: FavoriteService(),
-        historyService: HistoryService(),
+        favoriteService: FavoriteService(persistence),
+        recentService: RecentService(persistence),
       );
     } else {
       return ProviderConfig(
         propertyService: PropertyService(HttpClient()),
         geolocationService: GeolocationService(),
-        favoriteService: FavoriteService(),
-        historyService: HistoryService(),
+        favoriteService: FavoriteService(persistence),
+        recentService: RecentService(persistence),
       );
     }
   }

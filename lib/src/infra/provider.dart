@@ -9,7 +9,7 @@ class Provider extends InheritedWidget {
   PropertyService get propertyService => _config.propertyService;
   GeolocationService get geolocationService => _config.geolocationService;
   FavoriteService get favoriteService => _config.favoriteService;
-  HistoryService get historyService => _config.historyService;
+  RecentService get recentService => _config.recentService;
 
   Provider({
     Key key,
@@ -26,15 +26,15 @@ class ProviderConfig {
   final PropertyService propertyService;
   final GeolocationService geolocationService;
   final FavoriteService favoriteService;
-  final HistoryService historyService;
+  final RecentService recentService;
 
   ProviderConfig({
     @required this.propertyService,
     @required this.geolocationService,
     @required this.favoriteService,
-    @required this.historyService,
+    @required this.recentService,
   })  : assert(propertyService != null),
         assert(geolocationService != null),
         assert(favoriteService != null),
-        assert(historyService != null);
+        assert(recentService != null);
 }
