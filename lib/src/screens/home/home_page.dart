@@ -8,6 +8,8 @@ import 'package:flutter_playground/src/screens/home/form_body.dart';
 import 'package:flutter_playground/src/screens/home/location_selection_list.dart';
 import 'package:flutter_playground/src/screens/home/recent_search_list.dart';
 
+final _log = Logger('HomePage');
+
 enum DisplayMode {
   RECENT,
   LOCATIONS,
@@ -65,16 +67,19 @@ class HomePageState extends State<HomePage> {
               SizedBox(height: 16.0),
               Builder(builder: (context) {
                 switch (_displayMode) {
-                  case DisplayMode.RECENT:
-                    return RecentSearchList();
                   case DisplayMode.LOCATIONS:
                     return LocationSelectionList(
                       candidates: _result.locations,
                     );
                   case DisplayMode.ERROR:
                     return Text(_getErrorMessage());
+                  case DisplayMode.RECENT:
                   default:
-                    return Container();
+                    return RecentSearchList(
+                      onTap: _searching
+                          ? null
+                          : (query) => _search(context, query),
+                    );
                 }
               }),
             ],
@@ -110,28 +115,28 @@ class HomePageState extends State<HomePage> {
   }
 
   void _onSearchResult(BuildContext context, SearchResult result) {
-    DisplayMode displayMode;
+    DisplayMode resultDisplayMode = _displayMode;
     switch (result.type) {
       case ResultType.SUCCESSFUL:
-        setState(() {
-          _searching = false;
-          _displayMode = DisplayMode.RECENT;
-        });
+        Provider.of(context).recentService.saveSearch(result.query, result);
+        resultDisplayMode = DisplayMode.RECENT;
         AppNavigator.goToSearchResults(
           context,
           result,
         );
         break;
       case ResultType.AMBIGUOUS:
-        displayMode = DisplayMode.LOCATIONS;
+        resultDisplayMode = DisplayMode.LOCATIONS;
         break;
       default:
-        displayMode = DisplayMode.ERROR;
+        resultDisplayMode = DisplayMode.ERROR;
     }
 
+    _log.finer(
+        'Result type: ${result.type} => Display mode $resultDisplayMode');
     setState(() {
       _searching = false;
-      _displayMode = displayMode;
+      _displayMode = resultDisplayMode;
       _result = result;
     });
   }

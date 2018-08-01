@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 
 class RecentService {
   final Persistence persistence;
+  final _log = Logger('RecentService');
 
   RecentService(this.persistence);
 
@@ -17,6 +18,10 @@ class RecentService {
 
   Future saveSearch(query, SearchResult searchResult) async {
     if (searchResult.type == ResultType.SUCCESSFUL) {
+      if (query is Geolocation) {
+        _log.warning('Geolocation search are not saved');
+        return;
+      }
       var recents = await persistence.recents;
       var latestSearch = RecentSearch(
         query: query.toString(),
