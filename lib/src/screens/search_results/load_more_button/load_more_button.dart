@@ -22,7 +22,7 @@ class LoadMoreButton extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
         onPressed: () {
-          callback();
+          callback?.call();
         });
   }
 }

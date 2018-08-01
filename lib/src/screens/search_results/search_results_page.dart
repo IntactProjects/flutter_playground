@@ -2,9 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/infra.dart';
 import 'package:flutter_playground/models.dart';
-import 'package:flutter_playground/screens.dart';
-import 'package:flutter_playground/src/screens/search_results/load_more_button/load_more_button.dart';
-import 'package:flutter_playground/src/screens/search_results/property_cell/search_result_property_cell.dart';
+import 'package:flutter_playground/widgets.dart';
 
 class SearchResultsPage extends StatefulWidget {
   final SearchResult initialSearchResult;
@@ -70,27 +68,14 @@ class SearchResultsPageState extends State<SearchResultsPage> {
             "${list.length} of ${widget.initialSearchResult.propertyResult.totalResults} matches"),
       ),
       body: SafeArea(
-          child: ListView.builder(
-        itemCount: list.length + 1,
-        itemBuilder: (context, index) => _createElement(context, index),
-      )),
-    );
-  }
-
-  Widget _createElement(BuildContext context, int index) {
-    if (index < list.length) {
-      return _createPropertyCell(context, list[index]);
-    } else {
-      return LoadMoreButton(isLoading: isLoading, callback: load);
-    }
-  }
-
-  Widget _createPropertyCell(BuildContext context, Property property) {
-    var onTap = (Property property) =>
-        AppNavigator.goToPropertyDetails(context, property);
-    return SearchResultsPropertyCell(
-      property: property,
-      onTap: onTap,
+        child: PropertyList(
+          list: list,
+          isLoading: isLoading,
+          isLoadMoreEnabled: list.length <
+              widget.initialSearchResult.propertyResult.totalResults,
+          callback: load,
+        ),
+      ),
     );
   }
 }

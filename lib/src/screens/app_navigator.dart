@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/models.dart';
-import 'package:flutter_playground/screens.dart';
+import 'package:flutter_playground/src/screens/favorites/favorites_page.dart';
 import 'package:flutter_playground/src/screens/property_details/property_details_page.dart';
 import 'package:flutter_playground/src/screens/search_results/search_results_page.dart';
 
@@ -8,7 +8,8 @@ class AppNavigator {
   AppNavigator._();
 
   static void goToFavorites(BuildContext context) {
-    Navigator.of(context).pushNamed(NamedRoutes.FAVORITES);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => FavoritesPage()));
   }
 
   static void goToSearchResults(BuildContext context, SearchResult result) {
