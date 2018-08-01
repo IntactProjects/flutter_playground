@@ -1,12 +1,14 @@
 import 'package:flutter_playground/models.dart';
 
 class SearchResult {
-  final Iterable<Property> properties;
+  final query;
+  final PropertyResult propertyResult;
   final Iterable<Location> locations;
   final SearchError error;
 
   const SearchResult({
-    this.properties = const [],
+    this.query,
+    this.propertyResult,
     this.locations = const [],
     this.error,
   });
@@ -14,11 +16,13 @@ class SearchResult {
   ResultType get type {
     if (error != null) {
       return ResultType.FAILED;
-    } else if (properties.isNotEmpty) {
+    } else if (propertyResult != null && !propertyResult.isEmpty) {
       return ResultType.SUCCESSFUL;
-    } else if (properties.isEmpty && locations.length > 1) {
+    } else if (propertyResult != null &&
+        propertyResult.isEmpty &&
+        locations.length > 1) {
       return ResultType.AMBIGUOUS;
-    } else if (properties.isEmpty) {
+    } else if (propertyResult != null && propertyResult.isEmpty) {
       return ResultType.NO_RESULT;
     }
     throw StateError("Unable to compute the resultType");

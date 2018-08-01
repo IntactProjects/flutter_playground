@@ -117,7 +117,10 @@ class HomePageState extends State<HomePage> {
           _searching = false;
           _displayMode = DisplayMode.RECENT;
         });
-        AppNavigator.goToSearchResults(context, result.properties.toList());
+        AppNavigator.goToSearchResults(
+          context,
+          result,
+        );
         break;
       case ResultType.AMBIGUOUS:
         displayMode = DisplayMode.LOCATIONS;
