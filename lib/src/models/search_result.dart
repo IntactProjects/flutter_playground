@@ -6,6 +6,8 @@ class SearchResult {
   final Iterable<Location> locations;
   final SearchError error;
 
+  List<Property> get properties => propertyResult?.properties ?? [];
+
   const SearchResult({
     this.query,
     this.propertyResult,
