@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_playground/infra.dart';
 import 'package:flutter_playground/models.dart';
 import 'package:flutter_playground/screens.dart';
+import 'package:flutter_playground/src/screens/search_results/load_more_button/load_more_button.dart';
 import 'package:flutter_playground/src/screens/search_results/property_cell/search_result_property_cell.dart';
 
 class SearchResultsPage extends StatefulWidget {
@@ -20,10 +21,11 @@ class SearchResultsPage extends StatefulWidget {
 }
 
 class SearchResultsPageState extends State<SearchResultsPage> {
-  int page;
   PropertyService propertyService;
   StreamController<PropertyResult> streamController;
   List<Property> list = [];
+  int page;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -34,6 +36,7 @@ class SearchResultsPageState extends State<SearchResultsPage> {
     streamController.stream.listen((propertyResult) => setState(() {
           page = propertyResult.page;
           list.addAll(propertyResult.properties);
+          isLoading = false;
         }));
   }
 
@@ -44,6 +47,10 @@ class SearchResultsPageState extends State<SearchResultsPage> {
   }
 
   void load() async {
+    setState(() {
+      isLoading = true;
+    });
+
     var result = await propertyService.search(widget.initialSearchResult.query,
         page: ++page);
     streamController.add(result.propertyResult);
@@ -74,16 +81,7 @@ class SearchResultsPageState extends State<SearchResultsPage> {
     if (index < list.length) {
       return _createPropertyCell(context, list[index]);
     } else {
-      return RaisedButton(
-          color: Theme.of(context).primaryColor,
-          elevation: 4.0,
-          splashColor: Colors.grey,
-          child: Text(
-              "Load more … \nResults for #search_term#, showing x of y properties"),
-          onPressed: () {
-            print("Load Data");
-            load();
-          });
+      return LoadMoreButton(isLoading: isLoading, callback: load);
     }
   }
 
