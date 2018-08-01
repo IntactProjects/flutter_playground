@@ -8,14 +8,17 @@ class Persistence {
   static const _FAVORITES = 'FAVORITES';
   static const _RECENTS = 'RECENTS';
 
-  Future<List<String>> get favorites async {
+  Future<List<Property>> get favorites async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getStringList(_FAVORITES);
+    return (prefs.getStringList(_FAVORITES) ?? [])
+        .map((serialized) => Property.fromJson(json.decode(serialized)))
+        .toList();
   }
 
-  Future setFavorites(List<String> value) async {
+  Future setFavorites(List<Property> value) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setStringList(_FAVORITES, value);
+    prefs.setStringList(
+        _FAVORITES, (value ?? []).map((p) => json.encode(p)).toList());
   }
 
   Future<List<RecentSearch>> get recents async {

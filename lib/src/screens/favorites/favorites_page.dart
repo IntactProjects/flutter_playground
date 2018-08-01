@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_playground/infra.dart';
 import 'package:flutter_playground/models.dart';
 import 'package:flutter_playground/widgets.dart';
 
@@ -12,6 +13,7 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class FavoritesPageState extends State<FavoritesPage> {
+  FavoriteService favoriteService;
   StreamController<List<Property>> streamController;
   List<Property> list;
 
@@ -28,13 +30,12 @@ class FavoritesPageState extends State<FavoritesPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // propertyService = Provider.of(context).propertyService;
+    favoriteService = Provider.of(context).favoriteService;
   }
 
   void load() async {
-    // var result = await propertyService.search(widget.initialSearchResult.query,
-    //     page: ++page);
-    streamController.add([]);
+    var properties = await favoriteService.favorites;
+    streamController.add(properties);
   }
 
   @override

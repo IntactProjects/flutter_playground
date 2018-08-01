@@ -9,16 +9,22 @@ class FavoriteService {
   FavoriteService(this.persistence);
 
   Future<bool> isFavorite(Property property) async {
-    return (await persistence.favorites).contains(property.id);
+    return (await persistence.favorites).any((p) => p.id == property.id);
   }
 
   Future setFavorite(Property property, bool isFavorite) async {
     var favorites = await persistence.favorites;
+
     if (isFavorite) {
-      favorites.removeWhere((id) => id == property.id);
+      favorites.removeWhere((p) => p.id == property.id);
     } else {
-      favorites.add(property.id);
+      favorites.add(property);
     }
+
     persistence.setFavorites(favorites);
+  }
+
+  Future<List<Property>> get favorites {
+    return persistence.favorites;
   }
 }
