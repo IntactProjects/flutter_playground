@@ -15,12 +15,12 @@ class RecentService {
     return recents.take(maxCount).toList();
   }
 
-  Future saveSearch(String query, SearchResult searchResult) async {
+  Future saveSearch(query, SearchResult searchResult) async {
     if (searchResult.type == ResultType.SUCCESSFUL) {
       var recents = await persistence.recents;
       var latestSearch = RecentSearch(
-        query: query,
-        resultCount: searchResult.properties.length,
+        query: query.toString(),
+        resultCount: searchResult.propertyResult.totalResults,
       );
       // TODO Check if latestSearch already exists
       recents.add(latestSearch);

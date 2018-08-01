@@ -20,13 +20,16 @@ class Persistence {
 
   Future<List<RecentSearch>> get recents async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs
-        .getStringList(_RECENTS)
-        .map((serialized) => RecentSearch.fromJson(json.decode(serialized)));
+    return (prefs.getStringList(_RECENTS) ?? [])
+        .map((serialized) => RecentSearch.fromJson(json.decode(serialized)))
+        .toList();
   }
 
   Future setRecents(List<RecentSearch> value) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setStringList(_RECENTS, value.map((r) => json.encode(r)).toList());
+    prefs.setStringList(
+      _RECENTS,
+      value.map((r) => json.encode(r)).toList(),
+    );
   }
 }

@@ -16,11 +16,11 @@ class RecentSearch {
   RecentSearch.fromJson(Map<String, dynamic> json)
       : query = json['query'],
         resultCount = json['resultCount'],
-        searchDate = json['searchDate'];
+        searchDate = DateTime.parse(json['searchDate']);
 
   Map<String, dynamic> toJson() => {
         'query': query,
         'resultCount': resultCount,
-        'searchDate': searchDate,
+        'searchDate': searchDate.toIso8601String(),
       };
 }
