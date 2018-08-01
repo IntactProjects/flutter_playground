@@ -1,11 +1,13 @@
 import 'package:flutter_playground/models.dart';
 
 class SearchResult {
+  final query;
   final PropertyResult propertyResult;
   final Iterable<Location> locations;
   final SearchError error;
 
   const SearchResult({
+    this.query,
     this.propertyResult,
     this.locations = const [],
     this.error,

@@ -11,7 +11,7 @@ class AppNavigator {
     Navigator.of(context).pushNamed(NamedRoutes.FAVORITES);
   }
 
-  static void goToSearchResults(BuildContext context, PropertyResult result) {
+  static void goToSearchResults(BuildContext context, SearchResult result) {
     Navigator.push(
         context,
         MaterialPageRoute(

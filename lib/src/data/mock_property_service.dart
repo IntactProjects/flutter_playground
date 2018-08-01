@@ -5,6 +5,7 @@ import 'package:flutter_playground/src/data/property_service.dart';
 
 class MockPropertyService implements PropertyService {
   final _searchResult = SearchResult(
+      query: "london",
       propertyResult: PropertyResult(properties: _createProperties()));
 
   static List<Property> _createProperties() {
@@ -22,7 +23,11 @@ class MockPropertyService implements PropertyService {
   }
 
   @override
-  Future<SearchResult> search(String query, {int page = 1}) => _mockSearch();
+  Future<SearchResult> search(query, {int page = 1}) => _mockSearch();
+
+  @override
+  Future<SearchResult> searchByName(String query, {int page: 1}) =>
+      _mockSearch();
 
   @override
   Future<SearchResult> searchAround(Geolocation location, {int page = 1}) =>

@@ -22,13 +22,19 @@ class PropertyService {
       : assert(client != null),
         _client = client;
 
-  Future<SearchResult> search(String query, {int page = 1}) {
+  Future<SearchResult> search(query, {int page = 1}) {
+    return query is String
+        ? searchByName(query, page: page)
+        : searchAround(query, page: page);
+  }
+
+  Future<SearchResult> searchByName(String query, {int page = 1}) {
     // "http://api.nestoria.co.uk/api?country=uk&pretty=1&action=search_listings&encoding=json&listing_type=buy&page=1&place_name=leeds";
     var uri = _buildUri(<String, String>{
       'place_name': query,
       'page': '$page',
     });
-    return _get(uri);
+    return _get(query, uri);
   }
 
   Future<SearchResult> searchAround(Geolocation location, {int page = 1}) {
@@ -37,19 +43,19 @@ class PropertyService {
       'centre_point': '${location.latitude},${location.longitude}',
       'page': '$page',
     });
-    return _get(uri);
+    return _get(location, uri);
   }
 
   Uri _buildUri(Map<String, String> params) {
     return Uri.https(_AUTHORITY, _PATH, _defaultParams..addAll(params));
   }
 
-  Future<SearchResult> _get(Uri uri) {
+  Future<SearchResult> _get(query, Uri uri) {
     return _client
         .get(uri)
         .then((response) => response.body)
         .then(json.decode)
-        .then(_processJson)
+        .then((rawValue) => _processJson(query, rawValue))
         .timeout(
           _TIMEOUT,
           onTimeout: () => SearchResult(error: SearchError.TIMEOUT),
@@ -57,10 +63,11 @@ class PropertyService {
   }
 }
 
-SearchResult _processJson(rawValue) {
+SearchResult _processJson(query, rawValue) {
   var response = rawValue['response'];
   int responseCode = int.parse(response['application_response_code']);
   return SearchResult(
+    query: query,
     propertyResult: _jsonToPropertyResult(response),
     locations: response['locations'].map<Location>(_jsonToLocation),
     error: _searchError(responseCode),
