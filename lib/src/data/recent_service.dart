@@ -18,13 +18,21 @@ class RecentService {
 
   Future saveSearch(query, SearchResult searchResult) async {
     if (searchResult.type == ResultType.SUCCESSFUL) {
-      if (query is Geolocation) {
-        _log.warning('Geolocation search are not saved');
-        return;
+      String label;
+      if (query is Location) {
+        label = query.label;
+      } else if (query is Geolocation) {
+        _log.warning('Geolocation search. Check the returned location(s)');
+        label = _getSearchLabelFromResult(searchResult);
+        if (query == null) {
+          return;
+        }
       }
+
       var recents = await persistence.recents;
       var latestSearch = RecentSearch(
-        query: query.toString(),
+        label: label,
+        query: query,
         resultCount: searchResult.propertyResult.totalResults,
       );
 
@@ -41,6 +49,15 @@ class RecentService {
       ..sort(_recentsComparator);
     var survivors = recents.take(keep);
     persistence.setRecents(survivors);
+  }
+
+  String _getSearchLabelFromResult(SearchResult result) {
+    if (result.locations != null && result.locations.isNotEmpty) {
+      var location = result.locations.first;
+      return location.label;
+    } else {
+      return null;
+    }
   }
 }
 

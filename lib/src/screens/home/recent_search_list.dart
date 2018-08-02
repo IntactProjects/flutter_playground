@@ -56,7 +56,7 @@ class RecentSearchList extends StatelessWidget {
     var textTheme = Theme.of(context).textTheme;
     return ListTile(
       title: Text(
-        recent.query,
+        recent.label,
         style: textTheme.body2,
       ),
       trailing: Text(
