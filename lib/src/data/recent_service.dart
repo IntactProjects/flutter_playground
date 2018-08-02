@@ -44,5 +44,6 @@ class RecentService {
   }
 }
 
+// Reverse chronological order
 final _recentsComparator = (RecentSearch r1, RecentSearch r2) =>
-    r1.searchDate.compareTo(r2.searchDate);
+    r2.searchDate.compareTo(r1.searchDate);
