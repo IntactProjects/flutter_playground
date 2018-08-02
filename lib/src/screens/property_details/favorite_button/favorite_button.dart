@@ -1,6 +1,43 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_playground/infra.dart';
+import 'package:flutter_playground/models.dart';
 
 typedef void FavoriteButtonCallback(bool favorite);
+
+class FavoritePropertyButton extends StatelessWidget {
+  final Property property;
+
+  FavoritePropertyButton({
+    Key key,
+    this.property,
+  }) : super(key: key);
+
+  void handleFavorites(BuildContext context, bool isFavorite) {
+    Provider.of(context).favoriteService.setFavorite(property, isFavorite);
+  }
+
+  Future<bool> isFavorite(BuildContext context) {
+    return Provider.of(context).favoriteService.isFavorite(property);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: isFavorite(context),
+      initialData: false,
+      builder: (context, snap) {
+        return FavoriteButton(
+          initialFavorite: snap.data,
+          callback: (favorite) {
+            handleFavorites(context, favorite);
+          },
+        );
+      },
+    );
+  }
+}
 
 class FavoriteButton extends StatefulWidget {
   final bool initialFavorite;
@@ -8,7 +45,7 @@ class FavoriteButton extends StatefulWidget {
 
   const FavoriteButton({
     Key key,
-    this.initialFavorite = false,
+    this.initialFavorite,
     this.callback,
   }) : super(key: key);
 
@@ -23,8 +60,13 @@ class FavoriteButtonState extends State<FavoriteButton> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    favorite = widget.initialFavorite;
+  }
+
+  @override
+  void didUpdateWidget(FavoriteButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
     favorite = widget.initialFavorite;
   }
 
@@ -35,8 +77,8 @@ class FavoriteButtonState extends State<FavoriteButton> {
       icon: Icon(icon),
       onPressed: () {
         setState(() {
-          favorite = !favorite;
           widget.callback(favorite);
+          favorite = !favorite;
         });
       },
     );

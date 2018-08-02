@@ -7,11 +7,12 @@ class SearchResultsPropertyCell extends StatelessWidget {
   final Property property;
   final PropertyCallback onTap;
 
-  const SearchResultsPropertyCell({@required this.property, this.onTap});
+  const SearchResultsPropertyCell(
+      {Key key, @required this.property, this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(property.image.toString());
     return Card(
       child: InkWell(
         onTap: () => onTap(property),

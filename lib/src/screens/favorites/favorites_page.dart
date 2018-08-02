@@ -31,6 +31,7 @@ class FavoritesPageState extends State<FavoritesPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     favoriteService = Provider.of(context).favoriteService;
+    load();
   }
 
   void load() async {
@@ -45,12 +46,26 @@ class FavoritesPageState extends State<FavoritesPage> {
         title: Text("Favorites"),
       ),
       body: SafeArea(
-        child: PropertyList(
-          list: list,
-          isLoading: false,
-          isLoadMoreEnabled: false,
-        ),
+        child: _createElement(list),
       ),
     );
+  }
+
+  Widget _createElement(List<Property> properties) {
+    return properties.isEmpty
+        ? Center(
+            child: Padding(
+              padding: const EdgeInsets.all(28.0),
+              child: Text(
+                "You have not added any properties to your favourites",
+                textAlign: TextAlign.center,
+              ),
+            ),
+          )
+        : PropertyList(
+            list: properties,
+            isLoading: false,
+            isLoadMoreEnabled: false,
+          );
   }
 }
