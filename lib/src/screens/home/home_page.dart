@@ -8,6 +8,8 @@ import 'package:flutter_playground/src/screens/home/form_body.dart';
 import 'package:flutter_playground/src/screens/home/location_selection_list.dart';
 import 'package:flutter_playground/src/screens/home/recent_search_list.dart';
 
+final _log = Logger('HomePage');
+
 enum DisplayMode {
   RECENT,
   LOCATIONS,
@@ -23,6 +25,8 @@ class HomePageState extends State<HomePage> {
   bool _searching;
   DisplayMode _displayMode;
   SearchResult _result;
+
+  Widget _recentList;
 
   @override
   void initState() {
@@ -65,16 +69,15 @@ class HomePageState extends State<HomePage> {
               SizedBox(height: 16.0),
               Builder(builder: (context) {
                 switch (_displayMode) {
-                  case DisplayMode.RECENT:
-                    return RecentSearchList();
                   case DisplayMode.LOCATIONS:
                     return LocationSelectionList(
                       candidates: _result.locations,
                     );
                   case DisplayMode.ERROR:
                     return Text(_getErrorMessage());
+                  case DisplayMode.RECENT:
                   default:
-                    return Container();
+                    return _displayRecentList(context);
                 }
               }),
             ],
@@ -82,6 +85,18 @@ class HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  Widget _displayRecentList(BuildContext context) {
+    // Cache the RecentSearchList widget to avoid flashing when the state is changed
+    // The flashing is caused by the FutureBuilder rebuilding inside RecentSearchList
+    // TODO Find a better way to re-use the widget
+    if (_recentList == null) {
+      _recentList = RecentSearchList(
+        onTap: _searching ? null : (query) => _search(context, query),
+      );
+    }
+    return _recentList;
   }
 
   void _goToFavorites(BuildContext context) {
@@ -110,28 +125,28 @@ class HomePageState extends State<HomePage> {
   }
 
   void _onSearchResult(BuildContext context, SearchResult result) {
-    DisplayMode displayMode;
+    DisplayMode resultDisplayMode = _displayMode;
     switch (result.type) {
       case ResultType.SUCCESSFUL:
-        setState(() {
-          _searching = false;
-          _displayMode = DisplayMode.RECENT;
-        });
+        Provider.of(context).recentService.saveSearch(result.query, result);
+        resultDisplayMode = DisplayMode.RECENT;
         AppNavigator.goToSearchResults(
           context,
           result,
         );
         break;
       case ResultType.AMBIGUOUS:
-        displayMode = DisplayMode.LOCATIONS;
+        resultDisplayMode = DisplayMode.LOCATIONS;
         break;
       default:
-        displayMode = DisplayMode.ERROR;
+        resultDisplayMode = DisplayMode.ERROR;
     }
 
+    _log.finer(
+        'Result type: ${result.type} => Display mode $resultDisplayMode');
     setState(() {
       _searching = false;
-      _displayMode = displayMode;
+      _displayMode = resultDisplayMode;
       _result = result;
     });
   }
