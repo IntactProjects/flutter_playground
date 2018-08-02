@@ -7,7 +7,7 @@ typedef void OnTapSearch(String query);
 class RecentSearchList extends StatelessWidget {
   final OnTapSearch onTap;
 
-  const RecentSearchList({this.onTap});
+  const RecentSearchList({Key key, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

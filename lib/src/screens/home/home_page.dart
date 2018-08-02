@@ -26,6 +26,8 @@ class HomePageState extends State<HomePage> {
   DisplayMode _displayMode;
   SearchResult _result;
 
+  Widget _recentList;
+
   @override
   void initState() {
     super.initState();
@@ -75,11 +77,7 @@ class HomePageState extends State<HomePage> {
                     return Text(_getErrorMessage());
                   case DisplayMode.RECENT:
                   default:
-                    return RecentSearchList(
-                      onTap: _searching
-                          ? null
-                          : (query) => _search(context, query),
-                    );
+                    return _displayRecentList(context);
                 }
               }),
             ],
@@ -87,6 +85,18 @@ class HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  Widget _displayRecentList(BuildContext context) {
+    // Cache the RecentSearchList widget to avoid flashing when the state is changed
+    // The flashing is caused by the FutureBuilder rebuilding inside RecentSearchList
+    // TODO Find a better way to re-use the widget
+    if (_recentList == null) {
+      _recentList = RecentSearchList(
+        onTap: _searching ? null : (query) => _search(context, query),
+      );
+    }
+    return _recentList;
   }
 
   void _goToFavorites(BuildContext context) {
