@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/models.dart';
 import 'package:flutter_playground/src/screens/property_details/favorite_button/favorite_button.dart';
+import 'package:flutter_playground/widgets.dart';
 
 class PropertyDetailsPage extends StatelessWidget {
   final Property property;
@@ -35,8 +36,9 @@ class PropertyDetailsPage extends StatelessWidget {
                     textAlign: TextAlign.start,
                   ),
                   SizedBox(height: 10.0),
-                  Image.network(
-                    property.image.toString(),
+                  ImageHero(
+                    tag: property.id,
+                    image: property.image.toString(),
                   ),
                   SizedBox(height: 10.0),
                   Text(

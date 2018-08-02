@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/models.dart';
+import 'package:flutter_playground/widgets.dart';
 
 typedef void PropertyCallback(Property property);
 
@@ -20,8 +21,9 @@ class SearchResultsPropertyCell extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: <Widget>[
-              Image.network(
-                property.image.toString(),
+              ImageHero(
+                tag: property.id,
+                image: property.image.toString(),
                 height: 100.0,
                 width: 100.0,
               ),
