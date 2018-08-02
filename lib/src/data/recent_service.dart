@@ -27,8 +27,11 @@ class RecentService {
         query: query.toString(),
         resultCount: searchResult.propertyResult.totalResults,
       );
-      // TODO Check if latestSearch already exists
-      recents.add(latestSearch);
+
+      // Replace any previous search with the new one
+      recents
+        ..removeWhere((s) => s.query == query)
+        ..add(latestSearch);
       persistence.setRecents(recents);
     }
   }
