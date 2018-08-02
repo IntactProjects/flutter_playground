@@ -55,7 +55,7 @@ class FavoritesPageState extends State<FavoritesPage> {
     return properties.isEmpty
         ? Center(
             child: Padding(
-              padding: const EdgeInsets.all(28.0),
+              padding: const EdgeInsets.all(30.0),
               child: Text(
                 "You have not added any properties to your favourites",
                 textAlign: TextAlign.center,
