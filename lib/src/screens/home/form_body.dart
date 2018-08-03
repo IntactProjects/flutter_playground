@@ -8,8 +8,14 @@ typedef void SearchCallback(BuildContext context, String query);
 class FormBody extends StatefulWidget {
   final bool searching;
   final SearchCallback onSubmit;
+  final TextEditingController textController;
 
-  FormBody({Key key, this.searching = false, this.onSubmit}) : super(key: key);
+  FormBody({
+    Key key,
+    this.searching = false,
+    this.onSubmit,
+    this.textController,
+  }) : super(key: key);
 
   @override
   FormBodyState createState() => FormBodyState();
@@ -23,7 +29,7 @@ class FormBodyState extends State<FormBody> {
   @override
   void initState() {
     super.initState();
-    _searchController = TextEditingController();
+    _searchController = widget.textController ?? TextEditingController();
   }
 
   @override
@@ -73,7 +79,10 @@ class FormBodyState extends State<FormBody> {
 
   @override
   void dispose() {
-    _searchController.dispose();
+    // We should dispose of the textController only if it was created here
+    if (widget.textController == null) {
+      _searchController.dispose();
+    }
     super.dispose();
   }
 }

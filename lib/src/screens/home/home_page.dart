@@ -25,14 +25,21 @@ class HomePageState extends State<HomePage> {
   bool _searching;
   DisplayMode _displayMode;
   SearchResult _result;
+  TextEditingController _textController;
 
   Widget _recentList;
 
   @override
   void initState() {
     super.initState();
-    this._searching = false;
-    this._displayMode = DisplayMode.RECENT;
+    _searching = false;
+    _displayMode = DisplayMode.RECENT;
+    _textController = TextEditingController()
+      ..addListener(() {
+        if (_textController.text.isEmpty) {
+          setState(() => _displayMode = DisplayMode.RECENT);
+        }
+      });
   }
 
   @override
@@ -65,7 +72,11 @@ class HomePageState extends State<HomePage> {
                   "You can search by place-name, postcode, or click 'My location', " +
                   "to search in your current location!"),
               SizedBox(height: 16.0),
-              FormBody(searching: _searching, onSubmit: _search),
+              FormBody(
+                searching: _searching,
+                onSubmit: _doSearch,
+                textController: _textController,
+              ),
               SizedBox(height: 16.0),
               Builder(builder: (context) {
                 switch (_displayMode) {
@@ -93,7 +104,7 @@ class HomePageState extends State<HomePage> {
     // TODO Find a better way to re-use the widget
     if (_recentList == null) {
       _recentList = RecentSearchList(
-        onTap: _searching ? null : (query) => _search(context, query),
+        onTap: _searching ? null : (query) => _doSearch(context, query),
       );
     }
     return _recentList;
@@ -103,7 +114,7 @@ class HomePageState extends State<HomePage> {
     AppNavigator.goToFavorites(context);
   }
 
-  void _search(BuildContext context, String query) {
+  void _doSearch(BuildContext context, String query) {
     var provider = Provider.of(context);
     var propertyService = provider.propertyService;
 
@@ -176,5 +187,11 @@ class HomePageState extends State<HomePage> {
       default:
         return "There was a problem with your search";
     }
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
   }
 }
