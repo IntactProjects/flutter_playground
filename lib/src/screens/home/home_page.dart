@@ -122,7 +122,7 @@ class HomePageState extends State<HomePage> {
     if (query == SEARCH_MY_LOCATION) {
       provider.geolocationService
           .getLocation()
-          .then((geoloc) => propertyService.searchAround(geoloc))
+          .then((geoloc) => propertyService.search(geoloc))
           .catchError(_onGeolocError)
           .then((result) => _onSearchResult(context, result));
     } else {

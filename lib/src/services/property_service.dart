@@ -25,12 +25,19 @@ class PropertyService {
         _timeout = timeout;
 
   Future<SearchResult> search(query, {int page = 1}) {
-    return query is String
-        ? searchByName(query, page: page)
-        : searchAround(query, page: page);
+    if (query is String) {
+      return _searchByName(query, page);
+    } else if (query is Geolocation) {
+      return _searchAround(query, page);
+    } else if (query is Location) {
+      return _searchByName(query.key, page);
+    } else {
+      throw new UnsupportedError(
+          "Query of type ${query.runtimeType} are not supported");
+    }
   }
 
-  Future<SearchResult> searchByName(String query, {int page = 1}) {
+  Future<SearchResult> _searchByName(String query, int page) {
     // "http://api.nestoria.co.uk/api?country=uk&pretty=1&action=search_listings&encoding=json&listing_type=buy&page=1&place_name=leeds";
     var uri = _buildUri(<String, String>{
       'place_name': query,
@@ -39,7 +46,7 @@ class PropertyService {
     return _get(query, uri);
   }
 
-  Future<SearchResult> searchAround(Geolocation location, {int page = 1}) {
+  Future<SearchResult> _searchAround(Geolocation location, int page) {
     // "https://api.nestoria.co.uk/api?country=uk&pretty=1&action=search_listings&encoding=json&listing_type=buy&page=1&centre_point=51.684183,-3.431481";
     var uri = _buildUri(<String, String>{
       'centre_point': '${location.latitude},${location.longitude}',

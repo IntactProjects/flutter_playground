@@ -29,20 +29,8 @@ class MockPropertyService implements PropertyService {
   }
 
   @override
-  Future<SearchResult> search(query, {int page = 1}) => _mockSearch();
-
-  @override
-  Future<SearchResult> searchByName(String query, {int page: 1}) =>
-      _mockSearch();
-
-  @override
-  Future<SearchResult> searchAround(Geolocation location, {int page = 1}) =>
-      _mockSearch();
-
-  Future<SearchResult> _mockSearch() {
-    return Future.delayed(
-      Duration(seconds: 1, milliseconds: 500),
-      () => _searchResult,
-    );
-  }
+  Future<SearchResult> search(query, {int page = 1}) => Future.delayed(
+        Duration(seconds: 1, milliseconds: 500),
+        () => _searchResult,
+      );
 }

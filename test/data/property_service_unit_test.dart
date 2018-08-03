@@ -23,8 +23,9 @@ void main() {
 
   test('Search properties by location', () async {
     var http = MockClient((_) => Future.value(responses.searchByLocation));
-    var result = await PropertyService(http)
-        .searchAround(Geolocation(latitude: 51.684183, longitude: -3.431481));
+    var result = await PropertyService(http).search(
+      Geolocation(latitude: 51.684183, longitude: -3.431481),
+    );
 
     expect(result.type, ResultType.SUCCESSFUL);
     expect(result.properties.length, 20);
