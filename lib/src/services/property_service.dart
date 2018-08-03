@@ -7,7 +7,6 @@ import 'package:http/http.dart' show Client;
 class PropertyService {
   static const _AUTHORITY = 'api.nestoria.co.uk';
   static const _PATH = '/api';
-  static const _TIMEOUT = const Duration(seconds: 5);
 
   static Map<String, String> get _defaultParams => <String, String>{
         'action': 'search_listings',
@@ -17,10 +16,13 @@ class PropertyService {
       };
 
   final Client _client;
+  final Duration _timeout;
 
-  const PropertyService(client)
+  const PropertyService(client, {timeout = const Duration(seconds: 5)})
       : assert(client != null),
-        _client = client;
+        assert(timeout != null),
+        _client = client,
+        _timeout = timeout;
 
   Future<SearchResult> search(query, {int page = 1}) {
     return query is String
@@ -57,7 +59,7 @@ class PropertyService {
         .then(json.decode)
         .then((rawValue) => _processJson(query, rawValue))
         .timeout(
-          _TIMEOUT,
+          _timeout,
           onTimeout: () => SearchResult(error: SearchError.SEARCH_TIMEOUT),
         );
   }
