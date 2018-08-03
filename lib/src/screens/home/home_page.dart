@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_playground/infra.dart';
 import 'package:flutter_playground/screens.dart';
 import 'package:flutter_playground/widgets.dart';
@@ -123,7 +126,7 @@ class HomePageState extends State<HomePage> {
       provider.geolocationService
           .getLocation()
           .then((geoloc) => propertyService.search(geoloc))
-          .catchError(_onGeolocError)
+          .catchError(_handleGeolocError)
           .then((result) => _onSearchResult(context, result));
     } else {
       propertyService
@@ -159,11 +162,16 @@ class HomePageState extends State<HomePage> {
     });
   }
 
-  void _onGeolocError(error) {
-    setState(() {
-      _searching = false;
-      _result = SearchResult(error: SearchError.LOCATION_DISABLED);
-    });
+  SearchResult _handleGeolocError(e) {
+    SearchError searchError;
+    if (e is TimeoutException) {
+      searchError = SearchError.LOCATION_TIMEOUT;
+    } else if (e is PlatformException && e.code == 'PERMISSION_DENIED') {
+      searchError = SearchError.LOCATION_PERMISSION_REFUSED;
+    } else {
+      searchError = SearchError.LOCATION_DISABLED;
+    }
+    return SearchResult.failed(searchError);
   }
 
   String _getErrorMessage() {
@@ -180,8 +188,9 @@ class HomePageState extends State<HomePage> {
       case SearchError.COORDINATE_ERROR:
         return "The location given was not recognised.";
       case SearchError.LOCATION_DISABLED:
-      case SearchError.LOCATION_PERMISSION_REFUSED:
         return "The use of location is currently disabled.";
+      case SearchError.LOCATION_PERMISSION_REFUSED:
+        return "The use of location has been refused.";
       case SearchError.LOCATION_TIMEOUT:
         return "Unable to detect current location. Please ensure location is turned on in your phone settings and try again.";
       default:
