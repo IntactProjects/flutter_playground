@@ -44,7 +44,9 @@ class ImageHero extends StatelessWidget {
             imageUrl: this.url,
             width: width,
             height: height,
+            fadeInDuration: const Duration(milliseconds: 300),
             placeholder: CachedNetworkImage(
+              fit: BoxFit.contain,
               imageUrl: placeholder,
               width: width,
               height: height,
