@@ -16,18 +16,19 @@ class SearchResult {
   });
 
   ResultType get type {
-    if (error != null) {
-      return ResultType.FAILED;
-    } else if (propertyResult != null && !propertyResult.isEmpty) {
+    if (propertyResult != null && !propertyResult.isEmpty) {
       return ResultType.SUCCESSFUL;
     } else if (propertyResult != null &&
         propertyResult.isEmpty &&
         locations.length > 1) {
       return ResultType.AMBIGUOUS;
-    } else if (propertyResult != null && propertyResult.isEmpty) {
+    } else if (propertyResult != null &&
+        propertyResult.isEmpty &&
+        error == null) {
       return ResultType.NO_RESULT;
+    } else {
+      return ResultType.FAILED;
     }
-    throw StateError("Unable to compute the resultType");
   }
 }
 

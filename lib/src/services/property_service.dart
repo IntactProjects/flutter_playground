@@ -120,7 +120,7 @@ Location _jsonToLocation(jsonValue) {
 
 SearchError _searchError(int responseCode) {
   // See https://www.nestoria.co.uk/help/api-return-codes
-  if (responseCode == 201) {
+  if (responseCode == 200 || responseCode == 201) {
     return SearchError.UNKNOWN_LOCATION;
   } else if (responseCode == 210) {
     return SearchError.COORDINATE_ERROR;
