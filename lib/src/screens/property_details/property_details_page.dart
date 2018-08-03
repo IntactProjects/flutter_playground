@@ -36,9 +36,9 @@ class PropertyDetailsPage extends StatelessWidget {
                     textAlign: TextAlign.start,
                   ),
                   SizedBox(height: 10.0),
-                  ImageHero(
+                  ImageHero.fromImage(
                     tag: property.id,
-                    image: property.image.toString(),
+                    image: property.image,
                   ),
                   SizedBox(height: 10.0),
                   Text(

@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter_playground/infra.dart';
 import 'package:flutter_playground/models.dart';
-import 'package:flutter_playground/src/data/property_service.dart';
 
 class MockPropertyService implements PropertyService {
   final _searchResult = SearchResult(
@@ -12,11 +12,17 @@ class MockPropertyService implements PropertyService {
     var properties = <Property>[];
 
     for (int i = 0; i < 100; ++i) {
-      properties.add(Property(
-          address: "$i rue Royale, Lyon",
-          locality: "France",
-          price: 333333.0,
-          image: Uri.https("i.ytimg.com", "vi/fq4N0hgOWzU/maxresdefault.jpg")));
+      properties.add(
+        Property(
+            address: "$i rue Royale, Lyon",
+            locality: "France",
+            price: 333333.0,
+            image: ImageInfo(
+              uri: Uri.https("i.ytimg.com", "vi/fq4N0hgOWzU/maxresdefault.jpg"),
+              height: 300.0,
+              width: 400.0,
+            )),
+      );
     }
 
     return properties;

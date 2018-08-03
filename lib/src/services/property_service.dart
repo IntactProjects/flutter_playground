@@ -87,7 +87,16 @@ Property _jsonToProperty(jsonValue) {
     address: jsonValue['title'],
     summary: jsonValue['summary'],
     price: jsonValue['price'].toDouble(),
-    image: Uri.parse(jsonValue['img_url']),
+    image: ImageInfo(
+      uri: Uri.parse(jsonValue['img_url']),
+      width: double.tryParse(jsonValue['img_width'].toString()) ?? 0.0,
+      height: double.tryParse(jsonValue['img_height'].toString()) ?? 0.0,
+    ),
+    thumb: ImageInfo(
+      uri: Uri.parse(jsonValue['thumb_url']),
+      width: double.tryParse(jsonValue['thumb_width'].toString()) ?? 0.0,
+      height: double.tryParse(jsonValue['thumb_height'].toString()) ?? 0.0,
+    ),
     bathrooms: int.tryParse(jsonValue['bathroom_number'].toString()) ?? 0,
     bedrooms: int.tryParse(jsonValue['bedroom_number'].toString()) ?? 0,
   );

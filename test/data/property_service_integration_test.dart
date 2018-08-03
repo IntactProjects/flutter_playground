@@ -1,6 +1,5 @@
 import 'package:flutter_playground/infra.dart';
 import 'package:flutter_playground/models.dart';
-import 'package:flutter_playground/src/data/property_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 

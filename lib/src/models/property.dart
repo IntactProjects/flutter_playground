@@ -2,7 +2,8 @@ class Property {
   final double price;
   final String address;
   final String locality;
-  final Uri image;
+  final ImageInfo image;
+  final ImageInfo thumb;
   final int bedrooms;
   final int bathrooms;
   final String summary;
@@ -14,6 +15,7 @@ class Property {
     this.address,
     this.locality,
     this.image,
+    this.thumb,
     this.bedrooms,
     this.bathrooms,
     this.summary,
@@ -24,7 +26,16 @@ class Property {
         price = json['price'],
         address = json['address'],
         locality = json['locality'],
-        image = Uri.parse(json['image']),
+        image = ImageInfo(
+          uri: Uri.parse(json['image'] ?? ""),
+          width: json['image_width'],
+          height: json['image_height'],
+        ),
+        thumb = ImageInfo(
+          uri: Uri.parse(json['thumb'] ?? ""),
+          width: json['thumb_width'],
+          height: json['thumb_height'],
+        ),
         bedrooms = json['bedrooms'],
         bathrooms = json['bathrooms'],
         summary = json['summary'];
@@ -33,9 +44,22 @@ class Property {
         'price': price,
         'address': address,
         'locality': locality,
-        'image': image.toString(),
+        'image': image.uri.toString(),
+        'image_width': image.width,
+        'image_height': image.height,
+        'thumb': thumb.uri.toString(),
+        'thumb_width': thumb.width,
+        'thumb_height': thumb.height,
         'bedrooms': bedrooms,
         'bathrooms': bathrooms,
         'summary': summary,
       };
+}
+
+class ImageInfo {
+  final Uri uri;
+  final double width;
+  final double height;
+
+  const ImageInfo({this.uri, this.width, this.height});
 }

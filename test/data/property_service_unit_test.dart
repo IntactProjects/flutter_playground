@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter_playground/infra.dart';
 import 'package:flutter_playground/models.dart';
-import 'package:flutter_playground/src/data/property_service.dart';
 import 'package:http/testing.dart';
 import 'package:quiver/testing/async.dart';
 import 'package:test/test.dart';

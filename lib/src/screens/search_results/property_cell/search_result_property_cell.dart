@@ -21,11 +21,9 @@ class SearchResultsPropertyCell extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: <Widget>[
-              ImageHero(
+              ImageHero.fromImage(
                 tag: property.id,
-                image: property.image.toString(),
-                height: 100.0,
-                width: 100.0,
+                image: property.thumb,
               ),
               Expanded(
                 child: Padding(
