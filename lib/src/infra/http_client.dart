@@ -11,10 +11,13 @@ class HttpClient extends http.BaseClient {
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) {
     // Use default client while logging requests
-    _log.config("[HTTP] $request");
-    return _client.send(request).catchError((e) {
-      _log.severe("[HTTP] Error on $request: $e");
-      return e;
+    _log.fine("[HTTP] --> $request");
+    return _client.send(request).then((response) {
+      _log.fine("[HTTP] <-- ${response.statusCode} $request");
+      return response;
+    }).catchError((e) {
+      _log.warning("[HTTP] Error on $request: $e");
+      return Future<http.StreamedResponse>.error(e);
     });
   }
 
