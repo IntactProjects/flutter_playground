@@ -39,6 +39,7 @@ class PropertyDetailsPage extends StatelessWidget {
                   ImageHero.fromImage(
                     tag: property.id,
                     image: property.image,
+                    placeholder: property.thumb,
                   ),
                   SizedBox(height: 10.0),
                   Text(
