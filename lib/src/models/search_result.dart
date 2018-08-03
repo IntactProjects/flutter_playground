@@ -15,6 +15,8 @@ class SearchResult {
     this.error,
   });
 
+  const SearchResult.failed(SearchError error) : this(error: error);
+
   ResultType get type {
     if (propertyResult != null && !propertyResult.isEmpty) {
       return ResultType.SUCCESSFUL;

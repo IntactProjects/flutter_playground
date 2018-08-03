@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter_playground/infra.dart';
 import 'package:flutter_playground/models.dart';
 import 'package:http/http.dart' show Client;
+
+final _log = Logger('PropertyService');
 
 class PropertyService {
   static const _AUTHORITY = 'api.nestoria.co.uk';
@@ -65,10 +68,15 @@ class PropertyService {
         .then((response) => response.body)
         .then(json.decode)
         .then((rawValue) => _processJson(query, rawValue))
-        .timeout(
-          _timeout,
-          onTimeout: () => SearchResult(error: SearchError.SEARCH_TIMEOUT),
-        );
+        .timeout(_timeout)
+        .catchError((e) {
+      if (e is TimeoutException) {
+        return SearchResult.failed(SearchError.SEARCH_TIMEOUT);
+      } else {
+        _log.warning("Search error", e);
+        return SearchResult.failed(SearchError.SERVER_ERROR);
+      }
+    });
   }
 }
 
