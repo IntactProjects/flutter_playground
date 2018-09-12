@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/models.dart';
-import 'package:flutter_playground/src/screens/property_details/favorite_button/favorite_button.dart';
 import 'package:flutter_playground/widgets.dart';
 
 class PropertyDetailsPage extends StatelessWidget {

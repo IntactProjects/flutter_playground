@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/models.dart';
 import 'package:flutter_playground/screens.dart';
-import 'package:flutter_playground/src/screens/search_results/load_more_button/load_more_button.dart';
-import 'package:flutter_playground/src/screens/search_results/property_cell/search_result_property_cell.dart';
+import 'package:flutter_playground/widgets.dart';
 
 typedef void PropertyListCallback();
 
