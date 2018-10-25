@@ -8,7 +8,7 @@ class Property {
   final int bathrooms;
   final String summary;
 
-  String get id => "$address";
+  String get id => "$price$address$bedrooms";
 
   const Property({
     this.price,
