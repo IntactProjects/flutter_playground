@@ -38,7 +38,9 @@ class SearchForm extends StatelessWidget {
   }
 
   void _onClick(BuildContext context, String message) {
-    Scaffold.of(context).showSnackBar(
+    Scaffold.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(
       SnackBar(
         content: Text(message),
       ),

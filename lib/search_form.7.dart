@@ -50,7 +50,9 @@ class SearchFormState extends State<SearchForm> {
   }
 
   void _onClick(BuildContext context, String message) {
-    Scaffold.of(context).showSnackBar(
+    Scaffold.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(
       SnackBar(
         content: Text(message),
       ),
