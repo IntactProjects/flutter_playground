@@ -7,7 +7,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Playground 123',
+      title: 'Flutter Playground App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter Playground 456'),
+        title: Text('Flutter Playground'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
